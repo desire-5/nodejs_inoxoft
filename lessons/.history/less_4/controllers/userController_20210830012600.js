@@ -26,9 +26,13 @@ module.exports = {
 
     deleteUserById: async (req, res, next) => {
         try {
+            console.log('3333', req.body);
+            console.log('333443', req);
             const { user_id } = req.params;
-
-            const user_del = await User.findOneAndDelete(user_id);
+            if (!user_id) {
+                throw new ApiError(404, 'id not pass');
+            }
+            const user_del = await User.findOneAndDelete(req.user._id);
 
             res.json(user_del);
         } catch (e) {

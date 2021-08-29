@@ -22,6 +22,10 @@ module.exports = {
     isUserByIdExist: async (req, res, next) => {
         try {
             const { user_id } = req.params;
+            const { _id } = req.body;
+            if (!_id) {
+                throw new ApiError(404, 'User not found');
+            }
             const user = await User.findById(user_id);
 
             if (!user) {

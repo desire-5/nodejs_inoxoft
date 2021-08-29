@@ -23,7 +23,7 @@ module.exports = {
         try {
             const { user_id } = req.params;
             const user = await User.findById(user_id);
-
+            console.log('11111', user);
             if (!user) {
                 throw new ApiError(404, 'User not found');
             }
