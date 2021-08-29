@@ -11,10 +11,10 @@ global.TextEncoder = require('util').TextEncoder;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const { userRouter, orderRouter } = require('./routes');
+const { userRouter, postRouter } = require('./routes');
 
 app.use('/users', userRouter);
-app.use('/orders', orderRouter);
+app.use('/posts', postRouter);
 
 app.use(_mainErrorHandler);
 
@@ -22,7 +22,7 @@ app.listen(PORT, () => {
     console.log('App listen', PORT);
 });
 
-function _mainErrorHandler(err, req, res) {
+function _mainErrorHandler(err, req, res, next) {
     res
         .status(err.status || 500)
         .json({

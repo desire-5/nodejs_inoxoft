@@ -9,6 +9,6 @@ router.get('/:user_id', isUserByIdExist, userControllers.getUserById);
 router.get('/', userControllers.getAllUsers);
 router.delete('/:user_id', userControllers.deleteUserById);
 router.post('/', userControllers.createUser);
-router.put('/', userControllers.updateUser);
+// router.put('/', userControllers.updateUser);
 
 module.exports = router;

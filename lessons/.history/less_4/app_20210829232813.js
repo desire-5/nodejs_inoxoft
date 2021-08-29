@@ -22,7 +22,7 @@ app.listen(PORT, () => {
     console.log('App listen', PORT);
 });
 
-function _mainErrorHandler(err, req, res) {
+function _mainErrorHandler(err, req, res, next) {
     res
         .status(err.status || 500)
         .json({
