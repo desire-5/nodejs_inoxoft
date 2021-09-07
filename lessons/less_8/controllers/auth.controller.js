@@ -1,6 +1,8 @@
-const { constants, statusCodesEnum } = require('../configs');
-const { OAuth } = require('../dataBase');
-const { passwordService, jwtService } = require('../services');
+const {
+    actionTypeEnum, emailActionsEnum, config, constants, statusCodesEnum
+} = require('../configs');
+const { OAuth, ActionToken, User } = require('../dataBase');
+const { emailService, passwordService, jwtService } = require('../services');
 const { userUtil } = require('../utils');
 
 module.exports = {
@@ -48,6 +50,41 @@ module.exports = {
                 ...tokenPair,
                 user: userUtil.userNormalizator(currentUser)
             });
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    forgotPassword: async (req, res, next) => {
+        try {
+            const { user } = req;
+            console.log(user);
+            const token = jwtService.genereteActionToken(actionTypeEnum.FORGOT_PASS);
+
+            await ActionToken.create({ token, user: user._id });
+
+            await emailService.sendMail(
+                user.email,
+                emailActionsEnum.FORGOT_PASS,
+                { forgotPasswordUrl: `${config.FRONTED_URL}/forgot?token=${token}`, userName: user.name }
+            );
+
+            res.json('emeil is sent');
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    setMailForgotPassword: async (req, res, next) => {
+        try {
+            const token = req.get(constants.AUTHORIZATION);
+            const { currentUser, body } = req;
+
+            const hashPass = await passwordService.hash(body.password);
+            await User.findByIdAndUpdate(currentUser._id, { password: hashPass });
+            await ActionToken.deleteOne({ token });
+            await OAuth.deleteMany({ user: currentUser._id });
+            res.json('upd pass success');
         } catch (e) {
             next(e);
         }

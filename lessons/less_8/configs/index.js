@@ -1,4 +1,5 @@
 module.exports = {
+    actionTypeEnum: require('./actionTypesEnum'),
     config: require('./config'),
     constants: require('./constants'),
     dbEntityEnum: require('./dbEntity.enum'),

@@ -22,7 +22,13 @@ const updateUserValidator = Joi.object({
     role: Joi.string().allow(...Object.values(userRolesEnum)),
 });
 
+const passwordValidator = Joi.object({
+    password: Joi.string().regex(PASSWORD_REGEXP).trim()
+        .required(),
+});
+
 module.exports = {
     createUserValidator,
-    updateUserValidator
+    updateUserValidator,
+    passwordValidator
 };

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const ApiError = require('../error/ApiError');
-const { statusCodesEnum, config } = require('../configs');
+const { actionTypeEnum, statusCodesEnum, config } = require('../configs');
 
 module.exports = {
     generateTokens: () => {
@@ -22,5 +22,29 @@ module.exports = {
         } catch (e) {
             throw new ApiError(statusCodesEnum.UNA, 'Invalid token');
         }
+    },
+
+    genereteActionToken: (actionType) => {
+        let sol = '';
+        switch (actionType) {
+            case actionTypeEnum.FORGOT_PASS:
+                sol = config.FORGOT_PASSWORD_TOKEN_SECRET;
+                break;
+            default:
+                throw new ApiError(statusCodesEnum.SERVER_ERROR, 'Actiontype is wrong');
+        }
+        return jwt.sign({ actionType }, sol, { expiresIn: '7d' });
+    },
+
+    verifyActionToken: (actionType, token) => {
+        let sol = '';
+        switch (actionType) {
+            case actionTypeEnum.FORGOT_PASS:
+                sol = config.FORGOT_PASSWORD_TOKEN_SECRET;
+                break;
+            default:
+                throw new ApiError(statusCodesEnum.SERVER_ERROR, 'token is not verify');
+        }
+        return jwt.verify(token, sol);
     }
 };
