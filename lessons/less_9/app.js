@@ -18,7 +18,7 @@ const {
 } = require('./routes');
 
 app.use('/api/users', userRouterApi);
-app.use('/api/products', productRouterApi);
+// app.use('/api/products', productRouterApi);
 app.use('/api/orders', orderRouter);
 
 app.use('/auth', authRouter);
