@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const expressFileUpload = require('express-fileupload');
+
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +13,7 @@ global.TextEncoder = require('util').TextEncoder;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(expressFileUpload());
 
 const {
     authRouter, userRouter, orderRouter,
