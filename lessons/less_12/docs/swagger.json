@@ -1,0 +1,430 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Inoxoft Documentation",
+    "version": "0.0.1",
+    "description": "Inoxoft Course Node.js"
+  },
+  "paths": {
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get all users",
+        "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "How many items will be showed in one page",
+            "required": false,
+            "default": 20,
+            "type": "number"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page number",
+            "required": false,
+            "default": 1,
+            "type": "number"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort items",
+            "required": false,
+            "default": "createdAt",
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Order items by sort",
+            "required": false,
+            "default": "asc",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Email is not valid"
+                },
+                "data": {
+                  "description": "customer email",
+                  "type": "string",
+                  "example": "admin@inoxoft.com"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Create user",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "body",
+            "description": "User name",
+            "required": true,
+            "default": "Ivan",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "User emeil",
+            "required": true,
+            "default": "ivan@examole.com",
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "body",
+            "description": "User role",
+            "required": false,
+            "default": "user",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "User password",
+            "required": true,
+            "default": "*******",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Auth token",
+            "required": true,
+            "default": "AUTH_TOKEN777",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success create",
+            "schema": {
+              "$ref": "#/definitions/SuccessSchemaDef"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchemaDef"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedSchemaDef"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "get user by id",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "AUTH_TOKEN777",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "User id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "User id invalid",
+            "schema": {
+              "$ref": "#/definitions/userIdNotCorrectSchemaDef"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedSchemaDef"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFoundSchemaDef"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user by id",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "AUTH_TOKEN777",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "User id",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "type": "string",
+            "description": "User name",
+            "required": false
+          },
+          {
+            "name": "age",
+            "in": "body",
+            "type": "number",
+            "description": "User age",
+            "required": false
+          },
+          {
+            "name": "role",
+            "in": "body",
+            "type": "string",
+            "description": "User role",
+            "required": false
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "type": "string",
+            "description": "User email",
+            "required": false
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "body",
+            "description": "User password",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SuccessSchemaDef"
+            }
+          },
+          "400": {
+            "description": "User id invalid",
+            "schema": {
+              "$ref": "#/definitions/userIdNotCorrectSchemaDef"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedSchemaDef"
+            }
+          },
+          "403": {
+            "description": "Access only to admin",
+            "schema": {
+              "$ref": "#/definitions/PermissionDeniedSchemaDef"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFoundSchemaDef"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Token to authorize",
+            "default": "AUTH_TOKEN777",
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "type": "string",
+            "description": "User id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SuccessSchemaDef"
+            }
+          },
+          "400": {
+            "description": "User id invalid",
+            "schema": {
+              "$ref": "#/definitions/userIdNotCorrectSchemaDef"
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "schema": {
+              "$ref": "#/definitions/UnAuthorizedSchemaDef"
+            }
+          },
+          "403": {
+            "description": "Access only to admin",
+            "schema": {
+              "$ref": "#/definitions/PermissionDeniedSchemaDef"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFoundSchemaDef"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "customer ID",
+          "type": "string",
+          "example": "228"
+        },
+        "name": {
+          "description": "customer name",
+          "type": "string",
+          "example": "Igor"
+        },
+        "email": {
+          "description": "customer email",
+          "type": "string",
+          "example": "admin@inoxoft.com"
+        },
+        "role": {
+          "description": "customer role",
+          "type": "string",
+          "example": "user"
+        }
+      }
+    },
+    "errorSchemaDef": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Email is not valid"
+        },
+        "data": {
+          "description": "customer email",
+          "type": "string",
+          "example": "admin@inoxoft.com"
+        }
+      }
+    },
+    "SuccessSchemaDef": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Success request"
+        }
+      }
+    },
+    "UnAuthorizedSchemaDef": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Invalid token"
+        }
+      }
+    },
+    "userIdNotCorrectSchemaDef": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User id invalid"
+        }
+      }
+    },
+    "UserNotFoundSchemaDef": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User not found"
+        }
+      }
+    },
+    "PermissionDeniedSchemaDef": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Permission denied"
+        }
+      }
+    }
+  }
+}
